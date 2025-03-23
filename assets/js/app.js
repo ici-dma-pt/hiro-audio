@@ -1,21 +1,19 @@
 AFRAME.registerComponent('sound-trigger', {
-    init: function () {
-      const marker = this.el;
-      const sound = marker.querySelector('#hiro-audio');
-  
-      marker.addEventListener('markerFound', () => {
-        console.log('Hiro marker found — playing sound');
-        if (sound && sound.components.sound) {
-          sound.components.sound.playSound();
-        }
+  init: function () {
+    const marker = this.el;
+    const audioEl = document.querySelector('#my-sound');
+
+    marker.addEventListener('markerFound', () => {
+      console.log('Marker found — playing sound');
+      audioEl.play().catch(err => {
+        console.warn('Autoplay failed:', err);
       });
-  
-      marker.addEventListener('markerLost', () => {
-        console.log('Hiro marker lost — stopping sound');
-        if (sound && sound.components.sound) {
-          sound.components.sound.stopSound();
-        }
-      });
-    }
-  });
-  
+    });
+
+    marker.addEventListener('markerLost', () => {
+      console.log('Marker lost — stopping sound');
+      audioEl.pause();
+      audioEl.currentTime = 0;
+    });
+  }
+});
